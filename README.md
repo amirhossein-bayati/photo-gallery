@@ -1,6 +1,7 @@
 # photo-gallery
 This project is sample Django livewire photo gallery with Admin panel , Category , Comments, Photo share and more Capabilities 
 
+![Default Home View](__screenshots/Home-page.png?raw=true "Title")
 
 ### Main features
 
