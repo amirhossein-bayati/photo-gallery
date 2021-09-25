@@ -29,64 +29,56 @@ This project is sample Django livewire photo gallery with Admin panel , Category
 
 * Use Category to see specific Posts
 
-# Usage
-
+# Getting Started
 To use this template to start your own project:
 
-### Existing virtualenv
+clone the project
 
-If your project is already in an existing python3 virtualenv first install django by running
-
-    $ pip install django
+    git clone https://github.com/amirhossein-bayati/photo-gallery.git
     
-And then run the `django-admin.py` command to start the new project:
+create and start a a virtual environment
 
-    $ django-admin.py startproject \
-      --template=https://github.com/nikola-k/django-template/zipball/master \
-      --extension=py,md \
-      <project_name>
+    virtualenv env --no-site-packages
+
+    source env/bin/activate
+
+Install the project dependencies:
+
+    pip install -r requirements.txt
+
+create a postgres db and add the credentials to settings.py
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'db_name',
+            'USER': 'name',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+    
+then run
+
+    python manage.py migrate
+
+create admin account
+
+    python manage.py createsuperuser
       
-### No virtualenv
+then
 
-This assumes that `python3` is linked to valid installation of python 3 and that `pip` is installed and `pip3`is valid
-for installing python 3 packages.
+    python manage.py makemigrations
 
-Installing inside virtualenv is recommended, however you can start your project without virtualenv too.
+to makemigrations for the app
 
-If you don't have django installed for python 3 then run:
+then again run
 
-    $ pip3 install django
-    
-And then:
+    python manage.py migrate
 
-    $ python3 -m django startproject \
-      --template=https://github.com/nikola-k/django-template/zipball/master \
-      --extension=py,md \
-      <project_name>
-      
-      
-After that just install the local dependencies, run migrations, and start the server.
+to start the development server
 
-# Getting Started
+    python manage.py runserver
 
-First clone the repository from Github and switch to the new directory:
-
-    $ git clone git@github.com/USERNAME/{{ project_name }}.git
-    $ cd {{ project_name }}
-    
-Activate the virtualenv for your project.
-    
-Install project dependencies:
-
-    $ pip install -r requirements/local.txt
-    
-    
-Then simply apply the migrations:
-
-    $ python manage.py migrate
-    
-
-You can now run the development server:
-
-    $ python manage.py runserver
-
+and open localhost:8000 on your browser to view the app.
