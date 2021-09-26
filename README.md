@@ -13,8 +13,6 @@ This project is sample Django livewire photo gallery with Admin panel , Category
 
 * User registration and logging in
 
-* Procfile for easy deployments
-
 * Separated requirements files
 
 * Share posts with email
@@ -28,6 +26,8 @@ This project is sample Django livewire photo gallery with Admin panel , Category
 * Search in posts with postgresql Search
 
 * Use Category to see specific Posts
+
+* Site map
 
 # Getting Started
 To use this template to start your own project:
