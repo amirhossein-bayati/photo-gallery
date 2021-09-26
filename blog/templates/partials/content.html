@@ -1,0 +1,94 @@
+{% extends "blog/parent/base.html" %}
+{% load blog_tags %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block header %}
+    <style>
+        .image-thumbail {
+
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    {% if query %}
+        {% if total_posts == 0 %}
+            <h1>No Photo</h1>
+        {% endif %}
+        <h1>Posts containing "{{ query }}"</h1>
+        <h3>
+            {% with posts.count as total_posts %}
+                Found {{ total_posts }} result{{ total_posts|pluralize }}
+            {% endwith %}
+        </h3>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-md-3">
+
+
+            <ul class="list-group d-inline-flex p-3 mr-auto" style="width: 250px">
+
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    style="background-color: rgba(219,219,219,0.36)">
+                    Categories
+                </li>
+                <a href="{% url 'blog:list_with_category' 'all' %}" class="text-dark" style="text-decoration: none">
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center {% if current_cat == 'all' %}bg-info{% endif %}">
+                        All
+                    </li>
+                </a>
+                {% for cat in categories %}
+                    <a href="{% url 'blog:list_with_category' cat %}" class="text-dark" style="text-decoration: none">
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center {% if cat.name == current_cat %}bg-info{% endif %}">
+                            {{ cat }}
+                            <span class="badge badge-primary badge-pill">{{ cat.tag.count }}</span>
+                        </li>
+                    </a>
+                {% endfor %}
+
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+
+                {% for post in posts %}
+                    <div class="col-md-4">
+                        <div class="card my-2">
+                            <img class="image-thumbail" src="{{ post.image.url }}" alt="Card image cap">
+
+                            <div class="card-body">
+                                <h4 class="text-dark">
+                                    {{ post.title }}
+                                </h4>
+                                <small>
+                                    Category:
+                                    {% for tag in post.tag.all %}
+                                        <a href="{% url "blog:list_with_category" tag %}">{{ tag }}</a>,
+                                    {% endfor %}
+                                </small>
+                            </div>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-outline-dark btn-sm m-1">View</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h3>No photos...</h3>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

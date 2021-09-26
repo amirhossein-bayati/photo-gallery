@@ -1,0 +1,160 @@
+{% extends 'blog/parent/base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block header %}
+    <style>
+        .image-thumbail {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="my-2 text-info col-md-11 border border-info rounded bg-info text-dark text-center"
+                style="font-family: Serif; color: #856404">Hi {{ user }}</h4>
+
+            <ul class="list-group d-inline-flex p-3 mr-auto" style="width: 250px">
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Photos
+                    <span class="badge badge-primary badge-pill">{{ user.blog_posts.count }}</span>
+                </li>
+
+                <a href="{% url 'blog:user_account' %}" class="text-dark" style="text-decoration: none">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Account
+                    </li>
+                </a>
+
+                <a href="{% url 'account:password_change' %}" class="text-dark" style="text-decoration: none">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Change Password
+                    </li>
+                </a>
+
+                <a href="{% url 'account:user_logout' %}" class="text-danger" style="text-decoration: none">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Logout
+                    </li>
+                </a>
+
+                <li class="d-flex justify-content-between align-items-center my-1">
+                    <button type="button" class="btn btn-outline-info btn-block" data-toggle="modal"
+                            data-target="#exampleModal" data-whatever="@mdo">Add Photo
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-- Show Posts -->
+        <div class="col-md-9">
+            <h3 class="my-1">Your Photos:</h3>
+            <div class="row my-2">
+
+                {% for post in posts %}
+                    <div class="col-md-4">
+                        <div class="card my-2">
+                            <img class="image-thumbail" src="{{ post.image.url }}" alt="Card image cap">
+
+                            <div class="card-body">
+                                <h4 class="text-dark">
+                                    {{ post.title }}
+                                </h4>
+                                <small>
+                                    Category:
+                                    {% for tag in post.tag.all %}
+                                        <a href="{% url "blog:list_with_category" tag %}">{{ tag }}</a>,
+                                    {% endfor %}
+                                </small>
+                            </div>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-outline-dark btn-sm m-1">View</a>
+                            <a href="{{ post.get_absolute_url }}edit" class="btn btn-outline-primary btn-sm m-1">Edit</a>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h3>No photos...</h3>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Add Photo -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Photo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data">
+                        <!-- Errors -->
+                        {% if photoForm.errors %}
+                            {% for field in photoForm %}
+                                {% if field.errors %}
+                                    {% for err in field.errors %}
+                                        <div class="alert alert-danger">
+                                            {{ field.label }}: {{ err }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <!-- Title -->
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Title:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="title">
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="message-text" name="description"></textarea>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Select Category:</label>
+                            <select class="form-control" name="tag">
+                                <option>Select Category</option>
+
+                                {% for cat in  categories %}
+                                    <option value="{{ cat.id }}">{{ cat.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!-- Photo -->
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Photo</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image"
+                                   required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="submit">Upload</button>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

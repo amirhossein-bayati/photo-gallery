@@ -1,0 +1,63 @@
+<section class="pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h3 class="mb-3">Last Posts </h3>
+            </div>
+            <div class="col-6 text-right">
+                <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <a class="btn btn-primary mb-3 " href="#carouselExampleIndicators2" role="button" data-slide="next">
+                    <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="col-12">
+                <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="row">
+                                {% for post in lastests_posts|slice:":3" %}
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <a href="{{ post.get_absolute_url }}"><img class="img-fluid image-thumbail"
+                                                                                       alt="{{ post.title }}"
+                                                                                       src="{{ post.image.url }}" style="width:800px; height: 250px; object-fit: cover;"></a>
+                                            <div class="card-body">
+                                                <h4 class="card-title">{{ post.title }}</h4>
+                                                <p class="card-text">{{ post.description|truncatechars:50 }}</p>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="carousel-item ">
+                            <div class="row">
+                                {% for post in lastests_posts|slice:"3:" %}
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <a href="{{ post.get_absolute_url }}"><img class="img-fluid image-thumbail"
+                                                                                       alt="{{ post.title }}"
+                                                                                       src="{{ post.image.url }}" style="width:800px; height: 250px; object-fit: cover;"></a>
+                                            <div class="card-body">
+                                                <h4 class="card-title">{{ post.title }}</h4>
+                                                <p class="card-text">{{ post.description|truncatechars:50 }}</p>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>

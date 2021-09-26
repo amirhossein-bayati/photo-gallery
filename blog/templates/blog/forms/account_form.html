@@ -1,0 +1,109 @@
+{% extends 'blog/parent/base.html' %}
+
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+    <div class="card card-outline-secondary col-md-8 offset-md-2 my-3">
+        <div class="card-header">
+            <h3 class="mb-0 mx-0">User Acoount</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form">
+                {% csrf_token %}
+
+                <!-- first name & last Name -->
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name" name="first_name" required
+                                {% if form.first_name.value %}
+                               value="{{ form.first_name.value }}" {% else %}
+                               value="{{ account.user.first_name }}"{% endif %}>
+                    </div>
+
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name" name="last_name" required
+                                {% if form.last_name.value %}
+                               value="{{ form.last_name.value }}" {% else %}
+                               value="{{ account.user.last_name }}"{% endif %}>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+
+                    <!-- Email -->
+                    <div class="col">
+                        Email:
+                        <input type="email" class="form-control" id="formGroupExampleInput" name="email"
+                                {% if account.user.email %}
+                               value="{{ account.user.email }}"{% else %}
+                               placeholder="Email" {% endif %}>
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="col">
+                        phone number:
+                        <input type="number" class="form-control" id="formGroupExampleInput" name="phone"
+                                {% if account.phone %}
+                               readonly="readonly" value="{{ account.phone }}"{% else %}
+                               placeholder="Phone.no" {% endif %}>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3 my-2">
+                    Address:
+                    <textarea class="form-control" id="validationTextarea" placeholder="address" required
+                              name="address">{% if form.address.value %}{{ form.address.value }}{% else %}{{ account.address }}{% endif %}</textarea>
+                </div>
+
+
+                <!-- Age -->
+                <div class="row">
+                    <div class="col">
+                        age:
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="age"
+                               name="age"
+                                {% if form.age.value %} value="{{ form.age.value }}" {% elif account.age %}
+                               value="{{ account.age }}"{% endif %}>
+                    </div>
+                    <!-- Gender -->
+                    <div class="col">
+                        Gender:
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" name="gender" id="exampleRadios1"
+                                   value="man" {% if account.gender == "man" %}checked{% endif %}>
+                            <label class="form-check-label" for="exampleRadios1">
+                                man
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="exampleRadios2"
+                                   value="woman" {% if account.gender == "woman" %}checked{% endif %}>
+                            <label class="form-check-label" for="exampleRadios2">
+                                woman
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit -->
+                <input type="submit" value="Update" class="btn btn-block btn-primary my-3">
+                <!-- Errors -->
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for err in field.errors %}
+                                <div class="alert alert-danger">
+                                    {{ field.label }}: {{ err }}
+                                </div>
+
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}

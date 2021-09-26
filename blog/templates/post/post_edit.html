@@ -1,0 +1,78 @@
+{% extends 'blog/parent/base.html' %}
+
+{% load static %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+
+    <div class="card card-outline-secondary col-md-8 offset-md-2 my-3">
+        <div class="card-header">
+            <h3 class="mb-0 mx-0 text-center">Edit Photo</h3>
+        </div>
+        <div class="card-body">
+            <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}"
+                 style="width:800px; height: 400px; object-fit: cover;">
+            <form method="post" enctype="multipart/form-data" class="my-2">
+                <!-- Errors -->
+                {% if photoForm.errors %}
+                    {% for field in photoForm %}
+                        {% if field.errors %}
+                            {% for err in field.errors %}
+                                <div class="alert alert-danger">
+                                    {{ field.label }}: {{ err }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Title:</label>
+                    <input type="text" class="form-control" id="recipient-name" name="title" value="{{ post.title }}">
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Description:</label>
+                    <textarea class="form-control" id="message-text"
+                              name="description">{{ post.description }}</textarea>
+                </div>
+
+                <!-- Category -->
+                <div class="form-group">
+                    <label for="message-text" class="col-form-label">Select Category:</label>
+                    <select class="form-control" name="tag">
+                        <option>Select Category</option>
+
+                        {% for cat in  categories %}
+                            <option value="{{ cat.id }}" {% if cat.name == curent_cat %}
+                                    selected {% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Submit -->
+                <input type="submit" value="Update" class="btn btn-primary my-3">
+                <input type="submit" value="delete" name="delete" class="btn btn-danger my-3">
+
+                <!-- Errors -->
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for err in field.errors %}
+                                <div class="alert alert-danger">
+                                    {{ field.label }}: {{ err }}
+                                </div>
+
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% csrf_token %}
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

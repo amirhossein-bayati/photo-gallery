@@ -1,0 +1,176 @@
+{% extends 'blog/parent/base.html' %}
+{% load blog_tags %}
+{% load static %}
+
+
+{% block title %}post details{% endblock %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+
+    <style>
+        .image-thumbail {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Post View -->
+    <div class="card mb-6" style="max-width: 2000px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ post.image.url }}" class="img-fluid rounded-start" alt="{{ post.title }}">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.description }}</p>
+                    <p class="card-text"><small class="text-muted">{{ post.created }}</small></p>
+                    <p style="float: right;">
+                        {{ comments.count }} <img src="{% static 'images/comment.png' %}" width="25px">
+                        <a href="#" data-toggle="modal" data-target="#exampleModal" style="padding-left: 5px"><img
+                                src="{% static 'images/share_icon_30.png' %}" width="25px"></a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Of Post View -->
+
+
+    <!-- Share Post -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Share Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% for msg in messages %}
+                        {% if msg.tags == "warning" %}
+                            <div class="alert alert-success">
+                                {{ msg }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <form method="post" style="background-color: white;">
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label" style="color: black">Email:</label>
+                            <input type="email" class="form-control" id="recipient-name" name="email"
+                                   style="background-color: white">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" name="shareForm" class="btn btn-primary" value="Share">
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Of Share Post -->
+
+
+    <!-- Last Posts -->
+    {% show_lastest_posts %}
+    <!-- End Of Last Posts -->
+
+
+    <!-- Display Comments -->
+    <!-- Main Body -->
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-5 col-md-6 col-12 pb-4">
+
+                    <h1>Comments</h1>
+                    {% if comments.count == 0 %}
+                        <div class="alert alert-info" role="alert">
+                            There Is No Comment Yet!
+                        </div>
+                    {% endif %}
+                    {% for comment in comments %}
+                        <div class="{% cycle 'comment' 'darker' %} mt-4 text-justify float-left"
+                             style="max-width: 600px;"><img
+                                src={% cycle '/static/images/man.png' '/static/images/profile.png' %}
+                                        alt="{{ comment.name }}"
+                                class="rounded-circle" width="40" height="40">
+                            <h4>{{ comment.name }}</h4> <span>- {{ comment.created }}</span> <br>
+                            <p style="word-wrap: break-word">{{ comment.body }}</p>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <!-- Comment Form -->
+                <div class="col-lg-4 col-md-5 col-sm-4 offset-md-1 offset-sm-1 col-12 mt-4">
+                    <form id="algin-form" method="post">
+                        <div class="form-group">
+                            <h4>Leave a comment</h4> <label for="message">Message</label> <textarea name="body" id=""
+                                                                                                    body
+                                                                                                    cols="30" rows="5"
+                                                                                                    class="form-control"></textarea>
+                        </div>
+                        <div class="form-group"><label for="name">Name</label> <input type="text" name="name"
+                                                                                      id="fullname"
+                                                                                      class="form-control"
+                                                                                      {% if user.first_name %}value="{{ user.first_name }}"
+                                                                                      readonly="readonly"{% endif %}>
+                        </div>
+                        <div class="form-group"><label for="email">Email</label> <input type="email" name="email"
+                                                                                        id="email" class="form-control"
+                                                                                        {% if user.email %}value="{{ user.email }}"
+                                                                                        readonly="readonly"{% endif %}>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="post" class="btn" name="commentForm">Post Comment</button>
+                        </div>
+                        <!-- Success Message -->
+                        {% for msg in messages %}
+                            {% if msg.tags == "success" %}
+                                <div class="alert alert-success">
+                                    {{ msg }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% csrf_token %}
+                    </form>
+
+                </div>
+            </div>
+            <!-- End Of Comment Form -->
+        </div>
+    </section>
+
+
+    <!-- Errors -->
+    {% if comment_form.errors %}
+        <h2 class="danger">Errors: </h2><br>
+        {% for field in comment_form %}
+            {% if field.errors %}
+                {% for err in field.errors %}
+                    {{ field.label }}: {{ err }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+            {{ form.non_field_errors }}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+
