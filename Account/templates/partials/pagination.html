@@ -1,0 +1,28 @@
+<nav class="Page navigation example pagination-container">
+    <div class="pagination">
+
+        {% if page.has_previous %}
+            <a class="pagination-newer" href="?page={{ page.previous_page_number }}">PREV</a>
+        {% endif %}
+
+        <span class="pagination-inner">
+
+		    {% for p in page.paginator.page_range %}
+                {% if p == page.number %}
+                    <a class="pagination-active" href="?page={{ p }}">{{ p }}</a>
+                {% else %}
+                    <a href="?page={{ p }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+        </span>
+
+        {% if page.has_next %}
+            <a class="pagination-older" href="?page={{ page.next_page_number }}">NEXT</a>
+        {% endif %}
+
+    </div>
+</nav>
+
+
+
