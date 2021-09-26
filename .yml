@@ -1,0 +1,2 @@
+- name: Django Security Check
+  uses: victoriadrake/django-security-check@v1.1.0
